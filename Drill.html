@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400&family=Lobster&family=Roboto&display=swap" rel="stylesheet">
+  <title>Arithmetic Equation Game</title>
+  <style>
+    .correct {
+      color: green;
+    }
+    .incorrect {
+      color: red;
+    }
+    #block{
+                background-color: aquamarine;
+                margin-top: 120px;
+                margin-left: 35%;
+                margin-right: 35%;
+                text-align: center; 
+                font-family: 'Roboto', sans-serif;
+    }
+  </style>
+</head>
+<body>
+  
+  <div id="block">
+
+  <h1>Arithmetic Equation Game</h1>
+  <div id="equation"></div>
+  <label for="userAnswer">Enter your answer:</label>
+  <input type="text" id="userAnswer">
+  <button id="submitAnswer">Submit</button>
+  <p id="result"></p>
+  <p id="Finresult"></p><br><br>
+  <p><a href="Instructions.html">Exit/Stop Game</a></p>
+
+</div>
+
+  <script>
+    var questions = [];
+    var currentQuestionIndex = 0;
+    var correctCount = 0;
+    var incorrectCount = 0;
+    var indexOp;
+
+    // Generate 10 random arithmetic equations
+    for (var i = 0; i < 10; i++) {
+      
+      // Generate random arithmetic equation
+      var operators = ['+', '-', '*', '/']; // Available operators
+      var operator = operators[indexOp=Math.floor(Math.random() * operators.length)]; // Randomly select an operator
+
+
+      if(indexOp==0 || indexOp==1)
+      {
+        var var1 = Math.floor(Math.random() * 50 )+ 1; 
+        var var2 = Math.floor(Math.random() * 50) + 1; 
+
+      }
+      if(indexOp==2 || indexOp==3)
+      {
+        var var1 = Math.floor(Math.random() * 13 )+ 1; 
+        var var2 = Math.floor(Math.random() * 13) + 1; 
+      }
+
+
+      var equation = var1 + ' ' + operator + ' ' + var2;
+      questions.push(equation);
+    }
+
+    // Display the first equation
+    var equationElement = document.getElementById('equation');
+    equationElement.textContent = '' + questions[currentQuestionIndex];
+
+    // Handle form submission
+    var form = document.getElementById('submitAnswer');
+    var resultElement = document.getElementById('result');
+
+    form.addEventListener('click', function(event) {
+      event.preventDefault();
+
+      // Get the user's answer
+      var userAnswerElement = document.getElementById('userAnswer');
+      var userAnswer = parseFloat(userAnswerElement.value);
+
+      // Validate the user's input
+      if (isNaN(userAnswer)) {
+        resultElement.textContent = 'Please enter a numerical value.';
+        return;
+      }
+
+      // Evaluate if the user's answer is correct
+      var answer = eval(questions[currentQuestionIndex]);
+      var isCorrect = userAnswer === answer;
+
+      // Display the result
+      if (isCorrect) {
+        resultElement.textContent = 'Your answer is correct!';
+        resultElement.classList.add('correct');
+        resultElement.classList.remove('incorrect');
+        correctCount++;
+      } else {
+        resultElement.textContent = 'Your answer is incorrect!';
+        resultElement.classList.add('incorrect');
+        resultElement.classList.remove('correct');
+        incorrectCount++;
+      }
+
+      // Move to the next equation
+      currentQuestionIndex++;
+
+      // Check if all questions have been asked
+      if (currentQuestionIndex >= questions.length) {
+        equationElement.textContent = 'Questions Completed. Well Done!';
+        form.disabled = true;
+
+        // Display the final results
+        var totalAttempts = correctCount + incorrectCount;
+       
+
+        var results = 'Results: ' + 'Correct: ' + correctCount;
+       
+
+        document.getElementById("Finresult").innerHTML = results;  
+       
+      } else {
+        equationElement.textContent = '' + questions[currentQuestionIndex];
+        userAnswerElement.value = ''; // Clear the input field
+      }
+    });
+  </script>
+</body>
+</html>
